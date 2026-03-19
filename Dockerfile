@@ -2,9 +2,14 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-# Install system dependencies for OpenCV headless
+# Install all required system dependencies for OpenCV and deepface
 RUN apt-get update && apt-get install -y \
-    libsm6 libxext6 libxrender-dev libgl1 \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
+    libgl1 \
+    libglib2.0-0 \
+    libgomp1 \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements and install Python dependencies  
@@ -18,8 +23,8 @@ COPY backend/ ./backend/
 ENV PYTHONUNBUFFERED=1
 ENV FLASK_ENV=production
 
-# Expose port (Railway uses 8080)
+# Expose port
 EXPOSE 8080
 
-# Run gunicorn with dynamic port from environment
-CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:${PORT:-8080} --workers 2 --timeout 60 backend.app:app"]
+# Run gunicorn on port 8080
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--workers", "2", "--timeout", "60", "backend.app:app"]
