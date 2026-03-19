@@ -2,9 +2,9 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-# Install system dependencies for OpenCV
+# Install system dependencies for OpenCV headless
 RUN apt-get update && apt-get install -y \
-    libsm6 libxext6 libxrender-dev libgl1-mesa-glx \
+    libsm6 libxext6 libxrender-dev libgl1 \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements and install Python dependencies  
