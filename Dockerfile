@@ -18,8 +18,8 @@ COPY backend/ ./backend/
 ENV PYTHONUNBUFFERED=1
 ENV FLASK_ENV=production
 
-# Expose port
-EXPOSE 5000
+# Expose port (Railway uses 8080)
+EXPOSE 8080
 
-# Run gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "2", "--timeout", "60", "backend.app:app"]
+# Run gunicorn with dynamic port from environment
+CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:${PORT:-8080} --workers 2 --timeout 60 backend.app:app"]
