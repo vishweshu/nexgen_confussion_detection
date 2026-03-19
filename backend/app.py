@@ -5,8 +5,14 @@ import threading
 import time
 from ai_model import analyze_class
 import atexit
+import os
 
-app = Flask(__name__)
+# Get the directory of the current file
+basedir = os.path.dirname(os.path.abspath(__file__))
+
+app = Flask(__name__, 
+            template_folder=os.path.join(basedir, 'templates'),
+            static_folder=os.path.join(basedir, 'static'))
 
 # Deploy environments (like Heroku) typically don't have a webcam available.
 # Fall back to a blank frame so the server can still run.
