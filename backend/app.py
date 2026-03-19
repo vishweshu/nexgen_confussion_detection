@@ -12,6 +12,10 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Detect if running on Vercel (serverless environment)
+VERCEL_ENV = os.environ.get('VERCEL') == '1'
+logger.info(f"Running on Vercel: {VERCEL_ENV}")
+
 # Get the directory of the current file
 basedir = os.path.dirname(os.path.abspath(__file__))
 
@@ -233,11 +237,14 @@ def shutdown():
 
 atexit.register(shutdown)
 
-#  Start background threads
-logger.info("Starting background threads...")
-threading.Thread(target=read_camera, daemon=True).start()
-threading.Thread(target=process_frames, daemon=True).start()
-logger.info("Background threads started successfully.")
+# Start background threads (skip on Vercel serverless)
+if not VERCEL_ENV:
+    logger.info("Starting background threads...")
+    threading.Thread(target=read_camera, daemon=True).start()
+    threading.Thread(target=process_frames, daemon=True).start()
+    logger.info("Background threads started successfully.")
+else:
+    logger.warning("Skipping background threads on Vercel (serverless environment)")
 
 if __name__ == "__main__":
     import os
