@@ -73,7 +73,7 @@
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 1rem;
             width: 100%;
             margin-bottom: 2rem;
@@ -109,6 +109,7 @@
 
         .attentive-text { color: #4ade80; }
         .confused-text { color: #f87171; }
+        .sleeping-text { color: #c084fc; }
         .percent-text { color: #facc15; }
 
         .chart-container {
@@ -154,6 +155,10 @@
                 <div class="stat-card">
                     <span class="stat-value confused-text" id="confused">0</span>
                     <span class="stat-label">Confused</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value sleeping-text" id="sleeping">0</span>
+                    <span class="stat-label">Sleeping</span>
                 </div>
                 <div class="stat-card">
                     <span class="stat-value percent-text"><span id="percent">0</span>%</span>
@@ -233,6 +238,7 @@
                     // Update stats
                     document.getElementById('confused').innerText = data.confused;
                     document.getElementById('attentive').innerText = data.attentive;
+                    document.getElementById('sleeping').innerText = data.sleeping;
                     document.getElementById('percent').innerText = data.confusion;
                     
                     // Alert handling

@@ -42,6 +42,7 @@ camera = _init_camera()
 
 confused = 0
 attentive = 0
+sleeping = 0
 percent = 0
 history = []
 
@@ -81,7 +82,7 @@ def read_camera():
 
 # Background processing thread (slower, decoupled)
 def process_frames():
-    global raw_frame, latest_faces, confused, attentive, percent
+    global raw_frame, latest_faces, confused, attentive, sleeping, percent
     try:
         while not stop_event.is_set():
             try:
@@ -92,12 +93,13 @@ def process_frames():
                     time.sleep(0.1)
                     continue
 
-                faces_data, c, a, p = analyze_class(frame)
+                faces_data, c, a, s, p = analyze_class(frame)
 
                 with lock:
                     latest_faces = faces_data
                     confused = c
                     attentive = a
+                    sleeping = s
                     percent = p
                     
                 time.sleep(0.3)  # Slower processing
@@ -174,7 +176,7 @@ def video():
 
 @app.route("/stats")
 def stats():
-    global confused, attentive, percent, history
+    global confused, attentive, sleeping, percent, history
 
     history.append(percent)
     if len(history) > 20:
@@ -187,6 +189,7 @@ def stats():
     return jsonify({
         "confused": confused,
         "attentive": attentive,
+        "sleeping": sleeping,
         "confusion": percent,
         "history": history,
         "alert": alert
