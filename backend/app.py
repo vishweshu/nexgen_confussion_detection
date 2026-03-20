@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 import threading
 import time
-from ai_model import analyze_class
+# from ai_model import analyze_class  # TODO: restore once ai_model dependency is resolved
 import atexit
 import os
 import logging
@@ -92,7 +92,8 @@ def process_frames():
                     time.sleep(0.1)
                     continue
 
-                faces_data, c, a, p = analyze_class(frame)
+                # faces_data, c, a, p = analyze_class(frame)  # TODO: restore once ai_model dependency is resolved
+                faces_data, c, a, p = [], 0, 0, 0  # Stub: ai_model unavailable
 
                 with lock:
                     latest_faces = faces_data
